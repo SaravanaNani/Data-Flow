@@ -132,5 +132,31 @@ Since you need to quickly understand Data Flow and crack an interview in 2 weeks
 
 2️⃣ A hands-on project idea to showcase in your talk 📊
 
-🔹 Google Cloud Dataflow (Apache Beam) - Full Hands-on Guide
-▶️ Google Cloud Dataflow Tutorial (YouTube video - 30 min hands-on guide)
+
+
+###🔹 Google Cloud Dataflow (Apache Beam) - Hands-on Guide
+
+``Resource:`` https://cloud.google.com/dataflow/docs/guides/use-beam
+
+Description: This guide provides resources to get started with Apache Beam programming, which is essential for building pipelines in Google Cloud Dataflow.
+
+``Resource:`` Google Dataflow Hands-on Lab for Beginners
+
+https://youtu.be/8cIhbuvygBM?si=Y8L6fAM937AoXqJM
+
+Description: A YouTube video offering a hands-on lab experience for beginners to build pipelines with Dataflow.
+
+
+### 🔹 AWS Glue (ETL and Data Flow in AWS)
+
+`Resource:` Transforming data with AWS Glue in ETL workflows
+
+https://youtu.be/C4jwG6MAKmY?si=x3uvoXCr9zBFFovp
+
+Description: This YouTube video demonstrates how to use AWS Glue for data cleansing and transformation in ETL workflows.
+
+`Resource:` Build an ETL service pipeline using AWS Glue
+
+https://docs.aws.amazon.com/prescriptive-guidance/latest/patterns/build-an-etl-service-pipeline-to-load-data-incrementally-from-amazon-s3-to-amazon-redshift-using-aws-glue.html
+
+Description: This AWS documentation provides a step-by-step guide to building an ETL pipeline that loads data incrementally from Amazon S3 to Amazon Redshift using AWS Glue.
