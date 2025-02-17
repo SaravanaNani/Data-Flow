@@ -121,3 +121,16 @@ Data is collected, processed, stored, analyzed, and used for AI-driven recommend
 ✅ Hands-on with Real-Time Streaming (Pub/Sub, Kinesis, Event Hubs)
 
 ✅ Practice Cloud AI Services (Vertex AI, SageMaker, Azure ML)
+
+
+
+# 🚀 Hands-on Tutorial & Project Idea for Data Flow
+
+Since you need to quickly understand Data Flow and crack an interview in 2 weeks, I’ll give you:
+
+1️⃣ A beginner-friendly tutorial link 🎯
+
+2️⃣ A hands-on project idea to showcase in your talk 📊
+
+🔹 Google Cloud Dataflow (Apache Beam) - Full Hands-on Guide
+▶️ Google Cloud Dataflow Tutorial (YouTube video - 30 min hands-on guide)
