@@ -280,8 +280,12 @@ gcloud projects add-iam-policy-binding PROJECT_ID \
 
 ```
 Replace placeholders:
-PROJECT_ID → Your project ID
-EMAIL_ADDRESS → Your user email
-PROJECT_NUMBER → Your project number
-SERVICE_ACCOUNT_ROLE → Required roles (e.g.,` roles/dataflow.worker`, `roles/dataflow.admin`)
+
+        PROJECT_ID → Your project ID
+
+        EMAIL_ADDRESS → Your user email
+
+        PROJECT_NUMBER → Your project number
+        
+        SERVICE_ACCOUNT_ROLE → Required roles (e.g.,` roles/dataflow.worker`, `roles/dataflow.admin`)
 
