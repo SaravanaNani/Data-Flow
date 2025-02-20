@@ -289,3 +289,134 @@ Replace placeholders:
         
         SERVICE_ACCOUNT_ROLE → Required roles (e.g.,` roles/dataflow.worker`, `roles/dataflow.admin`)
 
+# Accessing Google Cloud Resources for Apache Beam Pipelines
+
+### 1. Resources That Require Access
+
+        -> Artifact Registry (for storing container images)
+
+        -> Cloud Storage (for reading/writing files)
+
+        -> BigQuery (for querying datasets)
+        
+        -> Pub/Sub (for message streaming)
+        
+        -> Firestore (for structured data storage)
+        
+### 2. Granting Access to the Dataflow Worker Service Account
+
+-> Use the Compute Engine default service account:
+
+```
+PROJECT_NUMBER-compute@developer.gserviceaccount.com
+```
+-> Or configure a user-managed service account.
+
+
+# 3. Permissions Required for Each Resource
+
+### rtifact Registry → `roles/artifactregistry.writer`
+ 
+
+-> Grant Artifact Registry Writer role:
+
+```
+gcloud projects add-iam-policy-binding PROJECT_ID \
+  --member="serviceAccount:PROJECT_NUMBER-compute@developer.gserviceaccount.com" \
+  --role="roles/artifactregistry.writer"
+
+```
+
+
+### Cloud Storage → `roles/storage.objectViewer`, `roles/storage.objectCreator`
+
+-> Grant Storage Object Viewer/Creator roles: (for reading/writing files)
+
+```
+gcloud storage buckets add-iam-policy-binding gs://BUCKET_NAME \
+  --member="serviceAccount:PROJECT_NUMBER-compute@developer.gserviceaccount.com" \
+  --role="roles/storage.objectViewer"
+
+gcloud storage buckets add-iam-policy-binding gs://BUCKET_NAME \
+  --member="serviceAccount:PROJECT_NUMBER-compute@developer.gserviceaccount.com" \
+  --role="roles/storage.objectCreator"
+```
+-> List existing buckets
+
+```
+gcloud storage buckets list --project=PROJECT_ID
+```
+
+### BigQuery → `roles/bigquery.dataEditor`, `roles/bigquery.jobUser`
+
+-> Grant the following roles: (for reading/writing datasets)
+
+        roles/bigquery.dataEditor (modify datasets)
+        
+        roles/bigquery.jobUser (run queries )
+
+```
+
+gcloud projects add-iam-policy-binding PROJECT_ID \
+  --member="serviceAccount:PROJECT_NUMBER-compute@developer.gserviceaccount.com" \
+  --role="roles/bigquery.dataEditor"
+
+gcloud projects add-iam-policy-binding PROJECT_ID \
+  --member="serviceAccount:PROJECT_NUMBER-compute@developer.gserviceaccount.com" \
+  --role="roles/bigquery.jobUser"
+```
+
+
+### Pub/Sub → `roles/pubsub.subscriber`
+
+-> Grant necessary roles based on use case: (for message streaming)
+
+        roles/pubsub.subscriber (consume messages)
+        
+        roles/pubsub.editor (create subscriptions)
+                
+        roles/pubsub.viewer (query topic settings)
+
+```
+gcloud projects add-iam-policy-binding PROJECT_ID \
+  --member="serviceAccount:PROJECT_NUMBER-compute@developer.gserviceaccount.com" \
+  --role="roles/pubsub.subscriber"
+
+```
+
+### Firestore → `roles/datastore.viewer`
+
+-> Grant Datastore Viewer role: (Datastore Mode)
+
+```
+gcloud projects add-iam-policy-binding PROJECT_ID \
+  --member="serviceAccount:PROJECT_NUMBER-compute@developer.gserviceaccount.com" \
+  --role="roles/datastore.viewer"
+```
+
+-> Ensure Firestore API is enabled:
+
+
+```
+gcloud services enable firestore.googleapis.com
+```
+
+### 4. Additional Considerations
+
+-> Assured Workloads: If using compliance controls (e.g., `EU regions`), all resources must be within an Assured Workloads project or folder.
+
+-> Cross-Project Access: If accessing resources in other projects, grant permissions in both projects.
+
+-> VPC Service Controls: Ensure that org policies or VPC security rules do not block access.
+
+
+### 5. Best Practices
+
+        ✅ Assign least privilege roles to service accounts.
+
+        ✅ Use IAM roles instead of legacy ACLs.
+
+        ✅ Verify access using: `gcloud projects get-iam-policy PROJECT_ID`
+
+        ✅ Enable required Google Cloud APIs before running pipelines.
+
