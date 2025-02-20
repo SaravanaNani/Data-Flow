@@ -161,4 +161,127 @@ gcloud iam roles describe roles/dataflow.serviceAgent
 
 -> The service account remains in IAM, but Dataflow won't function properly without its required permissions.
 
-# 
+# Worker Service Account - Key Points
+
+### 1️⃣ What is it?
+
+-> Used by Compute Engine worker VMs to run Apache Beam SDK operations in the cloud.
+
+-> Acts as the identity for all worker VMs, allowing them to access required Google Cloud resources.
+
+### 2️⃣ Permissions Required:
+
+`roles/dataflow.worker` → To run jobs.
+
+`roles/dataflow.admin` → To create or examine jobs.
+
+-> Additional permissions required based on the resources accessed (e.g.,` roles/bigquery.dataEditor `for BigQuery).
+
+### 3️⃣ Access to Google Cloud Resources:
+
+        -> Cloud Storage buckets
+        
+        ->BigQuery datasets
+
+        -> Pub/Sub topics and subscriptions
+
+        -> Firestore datasets
+
+### 4️⃣ Default Worker Service Account:
+
+-> Uses the Compute Engine default service account:
+```
+PROJECT_NUMBER-compute@developer.gserviceaccount.com
+
+```
+-> This account is created automatically when you enable the Compute Engine API.
+
+### 5️⃣ Best Practice: Use a Dedicated Worker Service Account
+
+-> Instead of using the default Compute Engine account, create a custom service account with only the required permissions.
+
+### 6️⃣ Security Considerations:
+
+-> By default, the `Compute Engine service account` may have the `"Editor"` role, which grants too many permissions.
+
+-> Disable automatic role grants using:
+
+`iam.automaticIamGrantsForDefaultServiceAccounts` policy constraint.
+
+### 7️⃣ Role Management & Least Privilege Principle:
+
+-> If the default account has `Editor` role, replace it with `specific` roles.
+
+-> Use Policy Simulator to analyze permission impact before making changes.
+
+# User-Managed Worker Service Account - Key Steps
+
+### 1️⃣ Create a User-Managed Service Account
+
+-> Instead of using the default Compute Engine service account, create a dedicated service account for fine-grained access control.
+
+### 2️⃣ Assign Required IAM Roles
+
+`roles/dataflow.worker` → To run Dataflow jobs.
+
+`roles/dataflow.admin` → To create or examine jobs.
+
+-> Additional roles for accessing required resources (e.g., `roles/bigquery.dataViewer` for BigQuery).
+
+### 3️⃣ Ensure Access to Staging & Temporary Locations
+
+-> The user-managed service account must have `read/write` access to `staging and temporary` locations used by Dataflow jobs.
+
+### 4️⃣ Grant Service Account Permissions
+
+-> Allow the service account to be impersonated:`iam.serviceAccounts.actAs` permission.
+
+-> Ensure Google-managed service accounts have these roles:
+
+-> Service Account Token Creator (`iam.serviceAccountTokenCreator`)
+
+-> Service Account User (`iam.serviceAccountUser`)
+
+### 5️⃣ Cross-Project Usage Considerations
+
+-> If the service account and job are in different projects, grant the necessary roles to allow cross-project service account usage.
+
+-> Ensure iam.disableCrossProjectServiceAccountUsage constraint is not enforced.
+
+### 6️⃣ Specify the Service Account in Your Pipeline Job
+
+Command Line:
+
+```
+--serviceAccount=SERVICE_ACCOUNT_NAME@PROJECT_ID.iam.gserviceaccount.com
+```
+### For Flex Templates:
+
+```
+--service-account-email=SERVICE_ACCOUNT_NAME@PROJECT_ID.iam.gserviceaccount.com
+```
+
+### 7️⃣ Assign Roles via gcloud CLI
+
+-> Grant Service Account User role to your user account:
+
+```
+gcloud projects add-iam-policy-binding PROJECT_ID \
+  --member="user:EMAIL_ADDRESS" \
+  --role=roles/iam.serviceAccountUser
+```
+
+-> Assign roles to the worker service account:
+
+```
+gcloud projects add-iam-policy-binding PROJECT_ID \
+  --member="serviceAccount:PROJECT_NUMBER-compute@developer.gserviceaccount.com" \
+  --role=SERVICE_ACCOUNT_ROLE
+
+```
+Replace placeholders:
+PROJECT_ID → Your project ID
+EMAIL_ADDRESS → Your user email
+PROJECT_NUMBER → Your project number
+SERVICE_ACCOUNT_ROLE → Required roles (e.g.,` roles/dataflow.worker`, `roles/dataflow.admin`)
+
