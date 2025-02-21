@@ -485,6 +485,9 @@ Operational Data: Metadata required to manage the pipeline (e.g., job name, job 
 ### 5. Best Practices
 
 🔹 Use built-in security mechanisms of storage services (e.g., Cloud Storage, BigQuery).
+
 🔹 Avoid mixing different trust levels in a single project.
+
 🔹 Always specify a region to ensure optimal data processing and security.
+
 🔹 Grant IAM roles with the least privilege needed for the pipeline.
