@@ -315,7 +315,7 @@ PROJECT_NUMBER-compute@developer.gserviceaccount.com
 
 # 3. Permissions Required for Each Resource
 
-### rtifact Registry → `roles/artifactregistry.writer`
+### Artifact Registry → `roles/artifactregistry.writer`
  
 
 -> Grant Artifact Registry Writer role:
@@ -420,3 +420,71 @@ gcloud services enable firestore.googleapis.com
 
         ✅ Enable required Google Cloud APIs before running pipelines.
 
+# Data Access and Security in Dataflow
+
+### 1. Types of Data in Dataflow
+
+End-User Data: Processed by the pipeline (e.g., input from sources, transformations, output to sinks).
+
+Operational Data: Metadata required to manage the pipeline (e.g., job name, job ID, pipeline options).
+
+### 2. Security Mechanisms Applied to:
+
+        -> Pipeline submission
+
+        -> Pipeline evaluation
+
+        -> Access to logs, telemetry, and metrics
+
+        -> Using Dataflow services (Shuffle, Streaming Engine)
+
+### 3. Data Locality
+
+-> Specify a region for Dataflow jobs to ensure data processing occurs in that region.
+
+-> If no region is specified, `us-central1` is the default.
+
+-> Data processing happens only in the specified region, even if sources/sinks are in different locations.
+
+-> Worker VMs execute pipeline logic in specified zones.
+
+### 4. Security in Different Data Stages
+
+✅ Pipeline Submission
+
+        -> Requires authentication via Google Cloud CLI.
+        
+        -> IAM roles (Editor/Owner) control access.
+        
+        -> Submitted via HTTPS for security.
+        
+✅ Pipeline Evaluation
+
+        -> Temporary data may be stored in Cloud Storage or worker VMs.
+
+        -> Temporary data is encrypted at rest and deleted after the job ends.
+
+        -> Compute Engine VMs and attached Persistent Disks are deleted upon job completion.
+        
+        -> Intermediate data might be found in --stagingLocation or --tempLocation in Cloud Storage.
+
+✅ Logs and Telemetry
+
+        -> Stored in Cloud Logging.
+
+        -> Dataflow adds only warnings and errors to logs.
+
+        -> Telemetry and metrics are encrypted at rest and access is controlled via IAM.
+
+✅ Data in Dataflow Services
+
+        -> Dataflow Shuffle/Streaming Engine auto-selects the zone when the region is specified.
+
+        -> Data in transit stays within worker VMs and remains in the pipeline’s specified region.
+
+### 5. Best Practices
+
+🔹 Use built-in security mechanisms of storage services (e.g., Cloud Storage, BigQuery).
+🔹 Avoid mixing different trust levels in a single project.
+🔹 Always specify a region to ensure optimal data processing and security.
+🔹 Grant IAM roles with the least privilege needed for the pipeline.
