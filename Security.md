@@ -181,7 +181,7 @@ gcloud iam roles describe roles/dataflow.serviceAgent
 
         -> Cloud Storage buckets
         
-        ->BigQuery datasets
+        -> BigQuery datasets
 
         -> Pub/Sub topics and subscriptions
 
@@ -246,7 +246,7 @@ PROJECT_NUMBER-compute@developer.gserviceaccount.com
 
 -> If the service account and job are in different projects, grant the necessary roles to allow cross-project service account usage.
 
--> Ensure iam.disableCrossProjectServiceAccountUsage constraint is not enforced.
+-> Ensure `iam.disableCrossProjectServiceAccountUsage` constraint is not enforced.
 
 ### 6️⃣ Specify the Service Account in Your Pipeline Job
 
